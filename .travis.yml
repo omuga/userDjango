@@ -6,5 +6,7 @@ python:
 services:
   - docker
 
-install:
-  - pip3 install -r requirements.txt
+before_script: pip install docker-compose
+
+script:
+  - docker-compose run web python  userdomain/manage.py
