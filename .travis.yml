@@ -19,4 +19,4 @@ services:
 before_script: pip install docker-compose
 
 script:
-  - docker-compose run web python  userdomain/manage.py
+  - docker-compose run web python  userdomain/manage.py test
