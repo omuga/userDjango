@@ -1,3 +1,4 @@
 #!/bin/bash
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-docker push USER/REPO
+docker tag bmuserdjango_web $DOCKER_USERNAME/bmuserdjango_web
+docker push $DOCKER_USERNAME/bmuserdjango_web
