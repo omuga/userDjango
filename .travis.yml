@@ -21,4 +21,7 @@ before_script:
 script:
   - docker-compose run web python  userdomain/manage.py 
   - bash build.sh
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker tag bmuserdjango_web  $DOCKER_USERNAME$/bmuserdjango_web
+  - docker push $DOCKER_USERNAME$/bmuserdjango_web
   
