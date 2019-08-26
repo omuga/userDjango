@@ -16,7 +16,11 @@ virtualenv:
 services:
   - docker
 
-before_script: pip install docker-compose
+before_script: 
+  - pip install docker-compose
+  - cd /userdomain
 
 script:
-  - docker-compose run web python  userdomain/manage.py test
+  - docker-compose run web python  userdomain/manage.py 
+  - python manage.py test
+  
