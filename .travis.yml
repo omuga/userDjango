@@ -1,10 +1,14 @@
 language: python
 
-python:
-  - python: 3.7
-    dist: xenial
-    sudo: true
-
+matrix:
+  include:
+    - python: 2.7
+    - python: 3.4
+    - python: 3.5
+    - python: 3.6
+    - python: 3.7
+      dist: xenial
+      sudo: true
 
 virtualenv:
   system_site_packages: true
