@@ -2,7 +2,6 @@ language: python
 
 matrix:
   include:
-
     - python: 3.5
 
 virtualenv:
@@ -15,7 +14,8 @@ before_script:
   - pip install docker-compose
 
 script:
-  - docker-compose run web python  userdomain/manage.py 
+  - docker-compose run web python  userdomain/manage.py makemigrations
+  - docker-compose run web python userdomain/manage.py migrate
   - bash build.sh
   - bash docker_push
 
