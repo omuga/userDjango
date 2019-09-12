@@ -42,6 +42,10 @@ INSTALLED_APPS = [
     'bookitem',
 ]
 
+CELERY_BROKER_URL = 'amqp://localhost'
+
+CELERY_RESULT_BACKEND = 'rpc'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

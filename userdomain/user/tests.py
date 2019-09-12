@@ -11,3 +11,12 @@ class UserTestCase(TestCase):
         users = self.setUp()
         self.assertTrue(isinstance(users[0],User))
         self.assertTrue(isinstance(users[1],User))
+
+    def test_users_from_db(self):
+        users = self.setUp()
+        User.save(users[0])
+        User.save(users[1])
+        user_1 = User.objects.get(email = "test123@google.cl")
+        user_2 = User.objects.get(email = "test123452@google.cl")
+        self.assertEqual(users[0],user_1)
+        self.assertEqual(users[1],user_2)

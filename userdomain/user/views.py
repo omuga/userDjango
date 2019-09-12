@@ -7,20 +7,18 @@ from rest_framework.views import APIView
 from rest_framework.generics import get_object_or_404
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin
+from .tasks import verify_users_ids
+from django.http import HttpResponse, Http404
 
-# Create your views here.
-#class UserView(viewsets.ModelViewSet):
-#    queryset = User.objects.all()
-#    serializer_class = UserSerializer
 class UserView(ListModelMixin, GenericAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     def get(self, request, pk = None):
         if pk:
-            print("Enviando a ",pk)
+            print(pk)
             user = get_object_or_404(User.objects.all(),pk = pk)
             serializer = UserSerializer(user)
-            return Response({"article": serializer.data})
+            return Response({"user": serializer.data})
         users = User.objects.all()
         serializer = UserSerializer(users,many = True)
         return Response({"users": serializer.data})
@@ -48,7 +46,17 @@ class UserView(ListModelMixin, GenericAPIView):
             user_saved = serializer.save()
         return Response({"success": "User '{}' updated successfully".format(user_saved.username)})
     def delete(self, request, pk):
-        # Get object with this pk
         user = get_object_or_404(User.objects.all(), pk=pk)
+        verify_users_ids.delay(user.id)
         user.delete()
         return Response({"message": "User with id `{}` has been deleted.".format(pk)},status=204)
+
+    def validate(request,pk):
+        try:
+            user = User.objects.get(pk = pk)
+            return HttpResponse(1)
+        except User.DoesNotExist:
+            return Http404(0)
+
+
+
