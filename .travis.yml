@@ -14,9 +14,15 @@ before_script:
   - pip install docker-compose
 
 script:
-  - docker-compose run web python  userdomain/manage.py makemigrations
-  - docker-compose run web python userdomain/manage.py migrate
   - bash build.sh
   - bash docker_push
+
+after_script:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build -t letzshake/bmuserdjango_web .  
+  - docker run -d --name bmusers -t letzshake/bmuserdjango_web python ./userdomain/manage.py runserver 0.0.0.0:8000
+  - sleep 15
+  - docker run --name owasp --link bmusers -t owasp/zap2docker-weekly zap-full-scan.py -t http://bmusers:8000
+
 
   
